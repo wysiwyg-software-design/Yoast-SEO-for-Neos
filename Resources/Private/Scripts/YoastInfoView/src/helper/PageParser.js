@@ -17,10 +17,14 @@ export default class PageParser {
 
         this.locale = (parsedPreviewDocument.querySelector('html').getAttribute('lang') || 'en_US').replace('-', '_');
 
-        this.pageContent = parsedPreviewDocument.querySelector(contentSelector).innerHTML;
-        // Remove problematic data attributes for the Yoast plugin from preview document
+        this.pageContent = '';
+        let pageContents = parsedPreviewDocument.querySelectorAll(contentSelector);
+
         const re = /data-.*?=".*?"/gim;
-        this.pageContent = this.pageContent.replace(re, '');
+        pageContents.forEach((pageContent) => {
+            // Remove problematic data attributes for the Yoast plugin from preview document
+            this.pageContent += pageContent.innerHTML.replace(re, '');
+        });
     }
 
     get title() {
